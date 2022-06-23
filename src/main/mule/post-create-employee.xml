@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="post-create-employee" doc:id="9ab193a6-24f4-4ee6-8d58-5a77aaa67dfd" >
+		<logger level="INFO" doc:name="Logger" doc:id="c4c9f67e-fae5-4cf2-afdc-76e64782520a" message="#[payload]"/>
+		<http:request method="PUT" doc:name="Request" doc:id="d2ebb161-d03a-4eaf-b456-4546f72045d8" config-ref="main_http_request" path="/api/update-employee-details"/>
+		<logger level="INFO" doc:name="Logger" doc:id="283c8e14-c404-4e01-b7a8-27c8b28c5209" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="d40197c7-3782-4281-b8e5-17cc1cf1629d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
