@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+	<http:listener-config name="main_http_listener" doc:name="HTTP Listener config" doc:id="bcf1932a-b704-4357-a718-8f594ecc5684" >
+		<http:listener-connection host="localhost" port="8084" />
+	</http:listener-config>
+	<http:request-config name="main_http_request" doc:name="HTTP Request configuration" doc:id="68ad8f03-c5e0-4752-a108-5d5b3f376ffd" >
+		<http:request-connection host="localhost" port="8085" />
+	</http:request-config>
+	<secure-properties:config name="mg1_properties_config" doc:name="Secure Properties Config" doc:id="288742c7-c8be-4e7c-94ae-a9f8c8cfe4e3" file="mg1_properties.yaml" key="aws" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="68113c19-c118-4b14-a91e-36d3f100340f" file="mg2_properties.yaml" key="MG2" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<sqs:config name="mg1_SQS_Configuration" doc:name="Amazon SQS Configuration" doc:id="fe5b2a61-00f3-480f-93bd-f65b2be1f652" defaultQueueUrl="${secure::aws.Queue Url}" >
+		<sqs:basic-connection testQueueArn="${secure::aws.arn}" accessKey="${secure::aws.Access Key}" secretKey="${secure::aws.Secret Key}" />
+	</sqs:config>
+	<sqs:config name="mg2_SQS_Configuration" doc:name="Amazon SQS Configuration" doc:id="bf095b08-43e7-4309-8ae7-04441d9c37fa" defaultQueueUrl="${secure::MG2.Queue Url}" >
+		<sqs:basic-connection testQueueArn="${secure::MG2.arn}" accessKey="${secure::MG2.Access Key}" secretKey="${secure::MG2.Secret Key}" />
+	</sqs:config>
+</mule>
