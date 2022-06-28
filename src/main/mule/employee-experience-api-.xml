@@ -125,27 +125,11 @@ output application/json
     </flow>
     <flow name="post:\create-employee:application\json:employee-experience-api--config">
         <flow-ref doc:name="Flow Reference" doc:id="7b0ba208-2aa0-4c5a-856b-8ba13f3178d3" name="post-create-employee" />
-        <ee:transform>
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Employee created successfully"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
     </flow>
     <flow name="get:\mg1-verification:employee-experience-api--config">
         <flow-ref doc:name="Flow Reference" doc:id="1d277c18-f8e9-4096-92b1-8012c218dc3b" name="get-mg1-verification" />
     </flow>
     <flow name="get:\mg2-verification:employee-experience-api--config">
 		<flow-ref doc:name="Flow Reference" doc:id="9932088e-d36e-475e-809b-c9a4fd80f29f" name="get-mg2-verification"/>
-    </flow>
-    <flow name="post:\mg1-approval:application\json:employee-experience-api--config">
-        <flow-ref doc:name="Flow Reference" doc:id="ccee95ec-2907-4440-bdec-14ebbacd44bc" name="post-mg1-approval"/>
-    </flow>
-    <flow name="post:\mg2-approval:application\json:employee-experience-api--config">
-		<flow-ref doc:name="Flow Reference" doc:id="cf89693a-7c51-48de-b067-61d038f8e39f" name="post-mg2-approval"/>
     </flow>
 </mule>
