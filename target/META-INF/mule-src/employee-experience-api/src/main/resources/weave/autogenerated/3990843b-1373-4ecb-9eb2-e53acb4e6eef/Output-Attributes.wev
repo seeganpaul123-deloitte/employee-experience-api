@@ -1,0 +1,6 @@
+%dw 2.0
+
+type auto_3990843b_1373_4ecb_9eb2_e53acb4e6eef_Output_Attributes = {| requestId?: String |} {"typeAlias": "RequestIDAttribute",
+"class": "org.mule.extension.sqs.api.attributes.RequestIDAttribute",
+"typeId": "org.mule.extension.sqs.api.attributes.RequestIDAttribute"}
+

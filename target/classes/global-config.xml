@@ -7,7 +7,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
 	<http:listener-config name="main_http_listener" doc:name="HTTP Listener config" doc:id="bcf1932a-b704-4357-a718-8f594ecc5684" >
-		<http:listener-connection host="localhost" port="8084" />
+		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
 	<http:request-config name="main_http_request" doc:name="HTTP Request configuration" doc:id="68ad8f03-c5e0-4752-a108-5d5b3f376ffd" >
 		<http:request-connection host="localhost" port="8085" />

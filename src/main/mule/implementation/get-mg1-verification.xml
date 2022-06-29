@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="f6502cec-ad72-4f60-a9f8-c4747dcb433e" >
+		<email:smtp-connection port="587" user="seeganpaul31@gmail.com" password="cawmmueoxtvdyvth" host="smtp.gmail.com">
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
 	<flow name="get-mg1-verification" doc:id="a5d4cb37-c316-4ed6-9e0e-ddb26fb92e58" >
 		<sqs:read doc:name="Read" doc:id="4ec79f7c-9fb4-4802-a463-0c98a4104930" config-ref="mg1_SQS_Configuration" maxNumberOfMessages="1" queueUrl="${secure::aws.Queue Url}"/>
 		<set-variable value="#[payload[0].receiptHandle]" doc:name="Set Variable" doc:id="483bf663-cbad-4aa7-973c-7aac34af0fc9" variableName="receipt_handle"/>
@@ -161,8 +169,23 @@ output application/json
   "amount": payload.LOAN_AMOUNT	
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="Personal" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "loan_id": payload.LOAN_ID,
+  "user_id": payload.USERID,
+  "status": "Accepted",
+  "reason": "Approved by MG1",
+  "amount": payload.LOAN_AMOUNT	
+}]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
-				<http:request method="POST" doc:name="Request" doc:id="2454dde4-21ae-4e8f-8608-495403443acb" config-ref="main_http_request" path="/api/mg1-approval"/>
+				<flow-ref doc:name="Flow Reference" doc:id="fc963e4f-59c2-40be-aa59-29f924284bbc" name="email"/>
+				<http:request method="POST" doc:name="Request" doc:id="2454dde4-21ae-4e8f-8608-495403443acb" config-ref="main_http_request" path="/api/mg1-approval">
+					<http:body ><![CDATA[#[vars.Personal]]]></http:body>
+				</http:request>
 				<ee:transform doc:name="Transform Message" doc:id="a2200354-f3f4-4452-a4d1-e0d8facce61e" >
 					<ee:message >
 					</ee:message>
@@ -197,8 +220,23 @@ output application/json
   "amount": payload.LOAN_AMOUNT		
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="Home" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "loan_id": payload.LOAN_ID,
+  "user_id": payload.USERID,
+  "status": "Accepted",
+  "reason": "Approved by MG1",
+  "amount": payload.LOAN_AMOUNT		
+}]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
-				<http:request method="POST" doc:name="Request" doc:id="8531a483-b2e3-4fac-a8e8-bbd0b2089abb" config-ref="main_http_request" path="/api/mg1-approval"/>
+				<flow-ref doc:name="Flow Reference" doc:id="57e9f51e-71cd-4110-b461-6fee1d7941c4" name="email"/>
+				<http:request method="POST" doc:name="Request" doc:id="8531a483-b2e3-4fac-a8e8-bbd0b2089abb" config-ref="main_http_request" path="/api/mg1-approval">
+					<http:body ><![CDATA[#[vars.Home]]]></http:body>
+				</http:request>
 				<ee:transform doc:name="Transform Message" doc:id="ecc8aac1-6a86-4cb6-8199-19851190aa0f" >
 					<ee:message >
 					</ee:message>
@@ -233,8 +271,23 @@ output application/json
   "amount": payload.LOAN_AMOUNT		
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="Car" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "loan_id": payload.LOAN_ID,
+  "user_id": payload.USERID,
+  "status": "Accepted",
+  "reason": "Approved by MG1",
+  "amount": payload.LOAN_AMOUNT		
+}]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
-				<http:request method="POST" doc:name="Request" doc:id="7694f763-4d5a-4e80-b0fc-96d848d82042" config-ref="main_http_request" path="/api/mg1-approval"/>
+				<flow-ref doc:name="Flow Reference" doc:id="47833ec4-7396-4fdf-a121-ce5c95941110" name="email"/>
+				<http:request method="POST" doc:name="Request" doc:id="7694f763-4d5a-4e80-b0fc-96d848d82042" config-ref="main_http_request" path="/api/mg1-approval">
+					<http:body ><![CDATA[#[vars.Car]]]></http:body>
+				</http:request>
 				<ee:transform doc:name="Transform Message" doc:id="6465d27c-ac62-46f4-be4c-21988f6df3f5" >
 					<ee:message >
 					</ee:message>
@@ -269,8 +322,23 @@ output application/json
   "amount": payload.LOAN_AMOUNT		
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="Agri" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "loan_id": payload.LOAN_ID,
+  "user_id": payload.USERID,
+  "status": "Denied",
+  "reason": "Loan amount is more than 400000",
+  "amount": payload.LOAN_AMOUNT		
+}]]></ee:set-variable>
+					</ee:variables>
 				</ee:transform>
-				<http:request method="POST" doc:name="Request" doc:id="fe6344a6-5334-4358-88a5-065d3ed6ad4a" config-ref="main_http_request" path="/api/mg1-approval"/>
+				<flow-ref doc:name="Flow Reference" doc:id="95484cb1-09a1-4ff6-a6cf-11e3ab7e1ded" name="email"/>
+				<http:request method="POST" doc:name="Request" doc:id="fe6344a6-5334-4358-88a5-065d3ed6ad4a" config-ref="main_http_request" path="/api/mg1-approval">
+					<http:body ><![CDATA[#[vars.Agri]]]></http:body>
+				</http:request>
 				<ee:transform doc:name="Transform Message" doc:id="b84c562e-d008-4c30-88fa-0f01f3abc168" >
 					<ee:message >
 					</ee:message>
@@ -292,5 +360,15 @@ vars.output4]]></ee:set-payload>
 				</ee:transform>
 			</otherwise>
 		</choice>
+	</flow>
+	<flow name="email" doc:id="3990843b-1373-4ecb-9eb2-e53acb4e6eef" >
+		<email:send doc:name="Send" doc:id="f4a8b899-2564-4559-90ee-c6d6f446be62" config-ref="Email_SMTP" fromAddress="seeganpaul31@gmail.com" subject="MyCredit Union ">
+			<email:to-addresses >
+				<email:to-address value="seeganpaul31@gmail.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain" encoding="UTF-8" >
+				<email:content ><![CDATA[#["Dear customer your loan status has been updated loan Id: "++ payload.loan_id as String ++", Status: "++ payload.status ++", Reason: "++ payload.reason]]]></email:content>
+			</email:body>
+		</email:send>
 	</flow>
 </mule>

@@ -1,0 +1,14 @@
+%dw 2.0
+
+type auto_ff2e7d24_1cff_4446_b8e1_1410f2475073_Output_Payload = {|
+  INTEREST: Any, 
+  LOAN_AMOUNT: Any, 
+  TYPE: Any, 
+  USER_ID: Any, 
+  EMAIL: Any, 
+  TENURE: Any, 
+  LOAN_ID: Any, 
+  INCOME: Any, 
+  MSG_Id: String | Null
+|}
+

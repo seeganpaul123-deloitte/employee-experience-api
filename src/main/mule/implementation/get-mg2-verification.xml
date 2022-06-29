@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
 	<flow name="get-mg2-verification" doc:id="ff2e7d24-1cff-4446-b8e1-1410f2475073" >
 		<sqs:read doc:name="Read" doc:id="26266f6c-d8f8-47df-a2f3-e7129a9a935c" config-ref="mg2_SQS_Configuration" maxNumberOfMessages="1" queueUrl="${secure::MG2.Queue Url}" />
 		<set-variable value="#[payload[0].receiptHandle]" doc:name="message id" doc:id="c5b66f3e-80cf-4338-8ed0-2e88003b62ca" variableName="msg_id" />
@@ -32,8 +33,30 @@ output application/json
   "amount": payload.LOAN_AMOUNT	
 }]]></ee:set-payload>
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="loanStatus" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "loan_id": payload.LOAN_ID,
+  "user_id": payload.USERID,
+  "status": "Accepted",
+  "reason": "Approved by MG1 and MG2",
+  "amount": payload.LOAN_AMOUNT	
+}]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
-		<http:request method="POST" doc:name="Request" doc:id="b584167c-8bd2-4b53-9fe6-677ab3fc5a1c" config-ref="main_http_request" path="/api/mg2-approval"/>
+		<email:send doc:name="Send" doc:id="02650403-3bb8-43a3-9cb4-bd2a7aa0a06e" config-ref="Email_SMTP" fromAddress="seeganpaul31@gmail.com" subject="MyCredit Union Loan status">
+			<email:to-addresses >
+				<email:to-address value="seeganpaul31@gmail.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain" encoding="UTF-8" >
+				<email:content ><![CDATA[#["Dear customer your loan status has been updated loan Id: "++ payload.loan_id as String ++", Status: "++ payload.status ++", Reason: "++ payload.reason]]]></email:content>
+			</email:body>
+		</email:send>
+		<http:request method="POST" doc:name="Request" doc:id="b584167c-8bd2-4b53-9fe6-677ab3fc5a1c" config-ref="main_http_request" path="/api/mg2-approval">
+			<http:body ><![CDATA[#[vars.loanStatus]]]></http:body>
+		</http:request>
 		<ee:transform doc:name="Transform Message" doc:id="6c5889d5-d61c-4a7b-a7d7-f825b68d44b5" >
 			<ee:message >
 			</ee:message>
