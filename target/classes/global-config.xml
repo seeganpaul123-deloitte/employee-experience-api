@@ -9,8 +9,8 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 	<http:listener-config name="main_http_listener" doc:name="HTTP Listener config" doc:id="bcf1932a-b704-4357-a718-8f594ecc5684" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
-	<http:request-config name="main_http_request" doc:name="HTTP Request configuration" doc:id="68ad8f03-c5e0-4752-a108-5d5b3f376ffd" >
-		<http:request-connection host="localhost" port="8085" />
+	<http:request-config name="main_http_request" doc:name="HTTP Request configuration" doc:id="68ad8f03-c5e0-4752-a108-5d5b3f376ffd" responseTimeout="30000">
+		<http:request-connection host="mule-app-employee-system-api-github.us-e2.cloudhub.io"/>
 	</http:request-config>
 	<secure-properties:config name="mg1_properties_config" doc:name="Secure Properties Config" doc:id="288742c7-c8be-4e7c-94ae-a9f8c8cfe4e3" file="mg1_properties.yaml" key="aws" >
 		<secure-properties:encrypt algorithm="Blowfish" />
