@@ -5,6 +5,7 @@
     "implementation/get-mg1-verification.xml",
     "implementation/post-create-employee.xml",
     "implementation/get-mg2-verification.xml",
+    "global-error.xml",
     "implementation/get-loan-status.xml"
   ],
   "secureProperties": [],
@@ -21,6 +22,7 @@
         "employee-experience-api-.xml",
         "examples/metadata.json",
         "global-config.xml",
+        "global-error.xml",
         "implementation/get-loan-status.xml",
         "implementation/get-mg1-verification.xml",
         "implementation/get-mg2-verification.xml",
