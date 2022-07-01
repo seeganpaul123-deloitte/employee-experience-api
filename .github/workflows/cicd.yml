@@ -117,38 +117,38 @@ jobs:
           [
               {
                 "id": "Exchange",
-                "username": "mycreditunion",
-                "password": "Deloitte@123"
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "anypoint-exchange",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "anypoint-exchange-v2",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "Exchange2",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "mulesoft-releases",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "mulesoft-snapshots",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "mulesoft-releases-ee",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               }
           ]
         profiles: >
