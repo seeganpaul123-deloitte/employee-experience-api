@@ -103,7 +103,7 @@ jobs:
               {
                 "id": "anypoint-exchange",
                 "name": "Corporate Anypoint Exchange",
-                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/$ORG_ID/maven/",
+                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/"$ORG_ID"/maven/",
                 "layout": "default",
                 "releases": {
                   "enabled": "true"
@@ -156,7 +156,7 @@ jobs:
               {
                 "id": "global-settings",
                 "properties": {
-                  "anypoint.org.id": $ORG_ID,
+                  "anypoint.org.id": "$ORG_ID",
                   "anypoint.exchange.repository": "https://maven.anypoint.mulesoft.com/api/v3/maven"
                 }
               }
