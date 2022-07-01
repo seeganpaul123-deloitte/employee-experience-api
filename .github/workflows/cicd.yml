@@ -22,6 +22,8 @@ jobs:
       with:
         java-version: 1.8
     - name: maven-settings-xml-action
+      env: 
+        ORG_ID: ${{ secrets.ORG_ID }}
       uses: whelk-io/maven-settings-xml-action@v20
       with:
         repositories: >
@@ -101,7 +103,7 @@ jobs:
               {
                 "id": "anypoint-exchange",
                 "name": "Corporate Anypoint Exchange",
-                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/${{ORG_ID}}/maven/",
+                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/$ORG_ID/maven/",
                 "layout": "default",
                 "releases": {
                   "enabled": "true"
@@ -154,7 +156,7 @@ jobs:
               {
                 "id": "global-settings",
                 "properties": {
-                  "anypoint.org.id": ${{ORG_ID}},
+                  "anypoint.org.id": $ORG_ID,
                   "anypoint.exchange.repository": "https://maven.anypoint.mulesoft.com/api/v3/maven"
                 }
               }
@@ -287,7 +289,7 @@ jobs:
               {
                 "id": "anypoint-exchange",
                 "name": "Corporate Anypoint Exchange",
-                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/${{ORG_ID}}/maven/",
+                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/${{secrets.ORG_ID}}/maven/",
                 "layout": "default",
                 "releases": {
                   "enabled": "true"
@@ -297,8 +299,8 @@ jobs:
                 }
               }
             ]
-        servers: >
-          [
+          servers: >
+           [
               {
                 "id": "Exchange",
                 "username": ${{secrets.M_USERNAME}},
@@ -334,9 +336,9 @@ jobs:
                 "username": ${{secrets.M_USERNAME}},
                 "password": ${{secrets.M_PASSWORD}}
               }
-          ]
-        profiles: >
-          [
+           ]
+          profiles: >
+           [
               {
                 "id": "global-settings",
                 "properties": {
@@ -344,9 +346,9 @@ jobs:
                   "anypoint.exchange.repository": "https://maven.anypoint.mulesoft.com/api/v3/maven"
                 }
               }
-          ]
-        plugin_repositories: >
-          [
+           ]
+          plugin_repositories: >
+           [
               {
                 "id": "mulesoft-releases",
                 "name": "mulesoft release repository",
@@ -363,7 +365,8 @@ jobs:
                 "id": "mule-public",
                 "url": "https://repository.mulesoft.org/nexus/content/repositories/public"
               }
-          ]      - uses: actions/download-artifact@master
+           ]      
+      - uses: actions/download-artifact@master
         with:
           name: artifacts
 
