@@ -211,9 +211,11 @@ jobs:
             ${{ runner.os }}-maven-
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v20
+        env: 
+          ORG_ID: ${{ secrets.ORG_ID }}
         with:
           repositories: >
-           [
+            [
               {
                 "id": "maven-central",
                 "name": "Maven Central Repository",
@@ -289,7 +291,7 @@ jobs:
               {
                 "id": "anypoint-exchange",
                 "name": "Corporate Anypoint Exchange",
-                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/${{secrets.ORG_ID}}/maven/",
+                "url": "https://maven.anypoint.mulesoft.com/api/v1/organizations/${{env.ORG_ID}}/maven/",
                 "layout": "default",
                 "releases": {
                   "enabled": "true"
@@ -300,55 +302,55 @@ jobs:
               }
             ]
           servers: >
-           [
+            [
               {
                 "id": "Exchange",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "anypoint-exchange",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "anypoint-exchange-v2",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "Exchange2",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "mulesoft-releases",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "mulesoft-snapshots",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               },
               {
                 "id": "mulesoft-releases-ee",
-                "username": ${{secrets.M_USERNAME}},
-                "password": ${{secrets.M_PASSWORD}}
+                "username": "${{secrets.M_USERNAME}}",
+                "password": "${{secrets.M_PASSWORD}}"
               }
-           ]
+            ]
           profiles: >
-           [
+            [
               {
                 "id": "global-settings",
                 "properties": {
-                  "anypoint.org.id": ${{secrets.ORG_ID}},
+                  "anypoint.org.id": "${{env.ORG_ID}}",
                   "anypoint.exchange.repository": "https://maven.anypoint.mulesoft.com/api/v3/maven"
                 }
               }
-           ]
+            ]
           plugin_repositories: >
-           [
+            [
               {
                 "id": "mulesoft-releases",
                 "name": "mulesoft release repository",
@@ -365,7 +367,7 @@ jobs:
                 "id": "mule-public",
                 "url": "https://repository.mulesoft.org/nexus/content/repositories/public"
               }
-           ]      
+            ]
       - uses: actions/download-artifact@master
         with:
           name: artifacts
